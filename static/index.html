@@ -1,0 +1,353 @@
+
+      
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+        <link rel="stylesheet" type="text/css" href="css/demo1.css" />
+        <link rel="stylesheet" type="text/css" href="css/login.css" />
+        <link rel="stylesheet" type="text/css" href="css/spinner.css" />
+
+        <meta charset="utf-8" />
+        <title>Super Chat temps réel !</title>
+        <style>
+            .user_bt{
+                color:white;
+                transition: all 0.5s ease;
+                text-align:right;
+                vertical-align: middle
+            }
+            .user_bt:hover{
+                color:red;
+                background-color:rgba(255,255,255,.5);
+                border-top:1px dashed lightgrey;
+                border-bottom:1px dashed lightgrey;
+                
+            }
+            .zone_chat{
+            
+                overflow:hidden;
+                overflow-y:auto;
+                border:1px solid rgb(200, 200, 200);
+                height:250px;
+            }
+            .zone_chat strong {
+                color: white;
+                background-color: black;
+                padding: 2px;
+
+                
+            }
+            #map {
+                width: 100%;
+                height: 400px;
+            }
+            
+            .loader {
+              margin: 0px auto;
+              font-size: 3px;
+              position: relative;
+              text-indent: -9999em;
+              border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+              border-right: 1.1em solid rgba(255, 255, 255, 0.2);
+              border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+              border-left: 1.1em solid #ffffff;
+              -webkit-transform: translateZ(0);
+              -ms-transform: translateZ(0);
+              transform: translateZ(0);
+              -webkit-animation: load8 1.1s infinite linear;
+              animation: load8 1.1s infinite linear;
+            }
+            .loader,
+            .loader:after {
+              border-radius: 50%;
+              width: 10em;
+              height: 10em;
+            }
+            @-webkit-keyframes load8 {
+              0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+              }
+              100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+              }
+            }
+            @keyframes load8 {
+              0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+              }
+              100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+              }
+            }
+
+
+        </style>
+    </head>
+ 
+    <body>
+        <div style="position:relative;height:100%;width:100%">
+            <div style="position:relative;height:100%;width:100%">
+                <div style="height:100%; position:relative">
+                <div style="position:relative"><img src="img/nodejslogo.png" style="width:80px;display:inline-block"></img><p style="display:inline-block;font-size:9px">ProcessMX server project</div>
+               
+                
+                
+                <div class="container" id="page-1">
+
+                    <!-- Top Navigation -->
+                    <section>
+                        <h2>Connectez-vous.</h2>
+                    </section>
+                    <div id="container" class='poped' style="max-width:350px">
+                        <form action="javascript:login()" autocomplete="on">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" name="username" autofocus>
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="password">   
+                        
+                        <div id="lower">
+                            <input type="submit" value="Login" id='btlogin'>
+                            <!--<button title='Login' id='btlogin'>Login</button>-->
+                        </div>
+                        </form>
+                    </div>
+
+                    <section>
+                        <h2>Création de votre compte.</h2>
+                    </section>
+                    <div id="container" class='poped' style="max-width:350px">
+                        <form action="javascript:register()" autocomplete="on">
+                            <label for="username">Username:</label>
+                            <input type="text" id="reg_username" name="username" autofocus>
+                            <label for="password">Password:</label>
+                            <input type="password" id="reg_password" name="password">  
+                            <label for="password">Picture:</label>
+                            <input id="upload-input" type="file" name="uploads[]" multiple="multiple"></br>      
+                            <div class="progress" style="color:grey">
+                              <div class="progress-bar" role="progressbar" style="background-color:red"></div>
+                            </div>
+                        <div id="lower">
+                            <input type="submit" value="Register" id='btRegister'>
+                            <!--<button title='Login' id='btlogin'>Login</button>-->
+                        </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="container" id="page-2" style="height:100%">
+                    <!--<div id="map"></div>-->   
+                    <section>
+                        <h2 id='titre_user'>Vos conversations.</h2>
+                        <div style="color:grey; display:inline-block; width:auto; position:relative; margin-right:30px;margin-top:30px; width:200px" class="poped">
+                            <div style="height:20px;">
+                                <div style="margin-left:5px;height:20px;;float:left"><p style="display:inline;font-size:12px;">Liste de vos amis</p></div>
+                            </div>
+                            <div class="zone_chat" id="user_list" style="border:0px solid grey;border-top:1px dashed;border-bottom:1px dashed; lightgrey;"><div style="height:100%;width:100%; position:absolute"></div></div>
+                        </div>
+                    </section>  
+                </div>
+
+            </div>
+
+            <div class="container" id='page-0' style='width:100%; height:100%;position:absolute;top:0px;left:0px'>
+                <div  style="position:absolute;top:40%;left:45%;height:100px;width:100px;vertical-align:middle;text-align:center">
+                    <p style="font-size:12px">loading datas...</p>
+                    <div style="top:20px" class='loader'></div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <script src="js/moment.min.js"></script>
+
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script   src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="js/socket.js"></script>
+        <script>
+            
+            var currentPage = 1;
+            function loadPage(_p)
+            {
+                $('#page-'+currentPage).delay(100).hide(300);
+                $('#page-0').show(100);
+                setTimeout( function() {  
+                    $('#page-0').delay(100).hide(100);   
+                    $('div[id^=page]').attr("class", 'container');
+                    currentPage = _p;
+                    $('#page-'+currentPage).hide();
+                    $('#page-'+currentPage).delay(100).attr("class", 'container show');
+                    $('#page-'+currentPage).delay(100).show(500);
+                }, 2000 );
+            }
+
+            if(localStorage.getItem("login") != null){
+             
+                $('#username').val(localStorage.getItem("login"));
+                $('#password').val(localStorage.getItem("password"));
+                
+            };
+            
+
+            function buildChat(_name, _color)
+            {
+                console.log('build '+_name);
+                var page = $('#page-2');
+                var chat = page.append('<div style="color:grey; display:inline-block; width:auto; position:relative; margin-right:30px;margin-top:30px" class="poped"></div>').find('div:last');
+                var header =  chat.append('<div style="height:20px;"></div>').find('div');
+                var close = header.append('<div style="border-radius:7px;width:14px; height:14px; background-color:black; float:right;margin:3px"></div>').find('div');
+                var title = header.append('<div style="margin-left:5px;height:20px;;float:left"><p style="display:inline;font-size:12px;">conversation avec '+_name+'</p></div>').find('p')
+                var display = chat.append('<div class="zone_chat" id="'+_name+'" style="border:0px solid grey;border-top:1px dashed;border-bottom:1px dashed; lightgrey;"></div>').find('div:last');
+                var tools =  chat.append('<div style="height:20px;background-color:lightgrey"></div>').find('div:last');
+               // var progress = tools.append('<div class="progress" style="color:grey"></div>').find('div');
+               // var progress_bar = progress.append('<div class="progress-bar" role="progressbar" style="background-color:red"></div>').find('div');
+               // var form_file = tools.append('<form action="javascript:login()"><input id="upload-input" type="file" name="uploads[]" multiple="multiple"><input type="submit" value="Envoi du fichier"></form>').find('form:last').css('background-color', _color);
+                var textarea = chat.append('<textarea type="text" placeholder="Votre message..." size="50" autofocus autocomplete="off" style="margin:0px 0px 0px 0px;border:0px solid grey" rows="3" cols="50"></textarea>').find('textarea');
+                close.click(function(){
+                   $(this).parent().parent().remove();
+                   quitRoom(_name);
+                })
+                //textarea.css('background-color',_color);
+              
+                function sendFile()
+                {
+                    alert('send');
+                }
+                
+                textarea.keypress(function(event) {
+                    if (event.keyCode == 13 && !event.shiftKey) {
+                        $(this).parent().submit(); //Submit your form here
+                        return false;
+                    }
+                });   
+
+                chat.submit(function () {
+                    var message = textarea.val();
+                    if(message == "")
+                        return false;
+                    socket.emit('message', message, _name); // Transmet le message aux autres
+                    //displayMessage(username, {message:message, date:new Date().getTime()},null, _name); // Affiche le message aussi sur notre page
+                    textarea.val('').focus(); // Vide la zone de Chat et remet le focus dessus
+                    return false; // Permet de bloquer l'envoi "classique" du formulaire
+                });
+
+                joinRoom(_name);
+
+            }
+
+            function buildPrivateChat(_name, _color)
+            {
+                console.log('build '+_name);
+                var page = $('#page-2');
+                var chat = page.append('<div style="color:grey; display:inline-block; width:auto; position:relative; margin-right:30px;margin-top:30px" class="poped"></div>').find('div:last');
+                var header =  chat.append('<div style="height:20px;"></div>').find('div');
+                var close = header.append('<div style="border-radius:7px;width:14px; height:14px; background-color:black; float:right;margin:3px"></div>').find('div');
+                var title = header.append('<div style="margin-left:5px;height:20px;;float:left"><p style="display:inline;font-size:12px;">conversation avec '+_name+'</p></div>').find('p')
+                var display = chat.append('<div class="zone_chat" id="'+_name+'" style="border:0px solid grey;border-top:1px dashed;border-bottom:1px dashed; lightgrey;"></div>').find('div:last');
+                var tools =  chat.append('<div style="height:20px;background-color:lightgrey"></div>').find('div:last');
+               // var progress = tools.append('<div class="progress" style="color:grey"></div>').find('div');
+               // var progress_bar = progress.append('<div class="progress-bar" role="progressbar" style="background-color:red"></div>').find('div');
+               // var form_file = tools.append('<form action="javascript:login()"><input id="upload-input" type="file" name="uploads[]" multiple="multiple"><input type="submit" value="Envoi du fichier"></form>').find('form:last').css('background-color', _color);
+                var textarea = chat.append('<textarea type="text" placeholder="Votre message..." size="50" autofocus autocomplete="off" style="margin:0px 0px 0px 0px;border:0px solid grey" rows="3" cols="50"></textarea>').find('textarea');
+                close.click(function(){
+                   $(this).parent().parent().remove();
+                   quitRoom(_name);
+                })
+                //textarea.css('background-color',_color);
+              
+                function sendFile()
+                {
+                    alert('send');
+                }
+                
+                textarea.keypress(function(event) {
+                    if (event.keyCode == 13 && !event.shiftKey) {
+                        $(this).parent().submit(); //Submit your form here
+                        return false;
+                    }
+                });   
+
+                chat.submit(function () {
+                    var message = textarea.val();
+                    if(message == "")
+                        return false;
+                    socket.emit('privateMessage', message, _name); // Transmet le message aux autres
+                    //displayMessage(username, {message:message, date:new Date().getTime()},null, _name); // Affiche le message aussi sur notre page
+                    textarea.val('').focus(); // Vide la zone de Chat et remet le focus dessus
+                    return false; // Permet de bloquer l'envoi "classique" du formulaire
+                });
+
+            }
+            setTimeout(function(){ loadPage(1);},1000)
+           
+
+
+
+/*
+            var map ;
+            var contentString = '<div id="content">'+
+              '<div id="siteNotice">'+
+              '</div>'+
+              '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+              '<div id="bodyContent">'+
+              '<img src="img/nodejslogo.png"></img>'+
+              '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+              'rock caves and ancient paintings. Uluru is listed as a World '+
+              'Heritage Site.</p>'+
+              '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+              'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+              '(last visited June 22, 2009).</p>'+
+              '</div>'+
+              '</div>';
+
+            var infowindow;
+            function initMap() {
+                var mapDiv = document.getElementById('map');
+                map = new google.maps.Map(mapDiv, {
+                    center: {lat: 44.540, lng: -78.546},
+                    zoom: 4
+                });
+            }
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(emitPosition);
+                    
+                } else {
+                    console.log("Geolocation is not supported by this browser.");
+                }
+            }
+            function emitPosition(position)
+            {
+                console.log('emit position');
+                socket.emit('emit_position',{lat:position.coords.latitude, long:position.coords.longitude});  
+            }
+            function showPosition(data) {
+                var infowindow = new google.maps.InfoWindow({content: contentString});
+                console.log(data.position.lat);
+                var label  = 'fdfdsfs';
+                var myLatlng = new google.maps.LatLng(data.position.lat,data.position.long);
+                map.panTo(myLatlng);
+                
+                var marker = new google.maps.Marker({
+                    position: myLatlng,
+                  });
+                infowindow.open(map, marker);
+            // To add the marker to the map, call setMap();
+            marker.setMap(map);
+            }
+*/
+            
+        </script>
+        <!--
+         <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC37T6gfVutC7-ruYGFKd7xrv-QH3Tn2BM&callback=initMap">
+        </script>
+        -->
+    </body>
+</html>
