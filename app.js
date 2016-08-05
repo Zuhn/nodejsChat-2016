@@ -1,3 +1,4 @@
+require('./config.js')();
 var colors = require('colors');
 colors.setTheme({
   input: 'grey',
@@ -237,10 +238,10 @@ function getAllClients()
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
-  host: '127.0.0.1',
-  port: '8889',
-  user: 'root',
-  password: 'root',
+  host: sql_ip,
+  port: sql_port,
+  user: sql_user,
+  password: sql_password,
   database: 'chat'
 });
 
@@ -315,8 +316,8 @@ function getLogin(_username, _password, _socket)
         // echo to room 1 that a person has connected to their room
         //_socket.broadcast.to(rooms[0]).emit('message', _username + ' has connected to this room');
         console.log("Utilisateurs connectés : "+getAllClients());
-        var session = new Session(_username);
-        session.start();
+        //var session = new Session(_username);
+        //session.start();
         
         
       };

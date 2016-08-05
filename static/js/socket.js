@@ -1,7 +1,7 @@
 var username;
 var password;
 // Connexion à socket.io
-var socket = io.connect('http://192.168.1.81:3000');
+var socket = io.connect('http://localhost:3000');
 
 socket.on('loginError', function() {
     loginError();
