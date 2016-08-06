@@ -1,4 +1,4 @@
-
+﻿
       
 <!DOCTYPE html>
 <html>
@@ -93,8 +93,7 @@
         <div style="position:relative;height:100%;width:100%">
             <div style="position:relative;height:100%;width:100%">
                 <div style="height:100%; position:relative">
-                <div style="position:relative"><img src="img/nodejslogo.png" style="width:80px;display:inline-block"></img><p style="display:inline-block;font-size:9px">ProcessMX server project</div>
-               
+                
                 
                 
                 <div class="container" id="page-1">
@@ -140,14 +139,47 @@
                 </div>
 
                 <div class="container" id="page-2" style="height:100%">
+                    <div id="bar" class="poped" style="position:fixed;top:0px;left:10px;height:40px;background-color:white;width:100%;margin-left:-10px;vertical-align:middle;display:table-cell;padding:0px">
+                        <div style="float:left;margin-left:10px;">
+                            <div>
+                                <p style="display:inline-block;font-size:12px;color:black;width:auto;height:auto;margin-top:5px;">Bienvenue dans votre espace </p>
+                                <p style="display:inline-block;font-size:12px;font-weight:700;color:black;width:auto;height:auto;padding:3px 5px 3px 5px;margin-top:5px;">Admin</p>
+                            </div>
+                        </div>
+                        <div style="float:right;margin-right:10px;">
+                            <div>
+                                <p style="display:inline-block;font-size:12px;color:black;width:auto;height:auto;margin-top:5px;">Message</p>
+                                <p style="display:inline-block;font-size:12px;color:white;width:auto;height:auto;border-radius:3px;background-color:blue;padding:3px 5px 3px 5px;margin-top:5px;">225</p>
+                            </div>
+                        </div>
+                        <div style="float:right;margin-right:10px;">
+                            <div>
+                                <p style="display:inline-block;font-size:12px;color:black;width:auto;height:auto;margin-top:5px;">Demandes d'amis</p>
+                                <p style="display:inline-block;font-size:12px;color:white;width:auto;height:auto;border-radius:3px;background-color:blue;padding:3px 5px 3px 5px;margin-top:5px;">5</p>
+                            </div>
+                        </div>
+                        <div style="float:right;margin-right:10px;">
+                            <div>
+                                <p style="display:inline-block;font-size:12px;color:black;width:auto;height:auto;margin-top:5px;">Groupes</p>
+                                <p style="display:inline-block;font-size:12px;color:white;width:auto;height:auto;border-radius:3px;background-color:blue;padding:3px 5px 3px 5px;margin-top:5px;">7</p>
+                            </div>
+                        </div>
+                        <div style="float:right;margin-right:10px;">
+                            <div>
+                                <p style="display:inline-block;font-size:12px;color:black;width:auto;height:auto;margin-top:5px;">fichiers</p>
+                                <p style="display:inline-block;font-size:12px;color:white;width:auto;height:auto;border-radius:3px;background-color:blue;padding:3px 5px 3px 5px;margin-top:5px;">47</p>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!--<div id="map"></div>-->   
                     <section>
                         <h2 id='titre_user'>Vos conversations.</h2>
                         <div style="color:grey; display:inline-block; width:auto; position:relative; margin-right:30px;margin-top:30px; width:200px" class="poped">
                             <div style="height:20px;">
-                                <div style="margin-left:5px;height:20px;;float:left"><p style="display:inline;font-size:12px;">Liste de vos amis</p></div>
+                                <div style="margin-left:5px;height:20px;float:left"><p style="display:inline;font-size:12px;">Liste de vos amis</p></div>
                             </div>
-                            <div class="zone_chat" id="user_list" style="border:0px solid grey;border-top:1px dashed;border-bottom:1px dashed; lightgrey;"><div style="height:100%;width:100%; position:absolute"></div></div>
+                            <div  class="zone_chat" id="user_list" style="border:0px solid grey;border-top:1px dashed;border-bottom:1px dashed; lightgrey;"><div style="height:100%;width:100%; position:absolute"></div></div>
                         </div>
                     </section>  
                 </div>
@@ -163,7 +195,7 @@
 
         </div>
 
-
+        </div>
         <script src="js/moment.min.js"></script>
 
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -171,10 +203,11 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="js/socket.js"></script>
         <script>
-            
+            $('#bar').css('top','-40px');
             var currentPage = 1;
             function loadPage(_p)
             {
+                $('#bar').delay(5000).animate({ top: '0px'});
                 $('#page-'+currentPage).delay(100).hide(300);
                 $('#page-0').show(100);
                 setTimeout( function() {  
